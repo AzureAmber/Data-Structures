@@ -1,0 +1,275 @@
+% -----------------------------------------------------------------------------
+                                % Standard Packages
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+    \setlength\parindent{0pt} % set distance between paragraphs to 0
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{afterpage}
+\usepackage{pagecolor}
+% -----------------------------------------------------------------------------
+                                % More font sizes
+\usepackage{moresize}
+% -----------------------------------------------------------------------------
+                                % Enhances mathematical formulas
+\usepackage{amsmath}
+\usepackage{mathtools}
+% -----------------------------------------------------------------------------
+                                % Includes math symbols
+\usepackage{amsfonts}
+% -----------------------------------------------------------------------------
+                                % Include integral symbols
+\usepackage{esint}
+% -----------------------------------------------------------------------------
+                                % Include latex symbols
+\usepackage{latexsym}
+% -----------------------------------------------------------------------------
+                                % Include referencing
+\usepackage{hyperref}
+    % URLs: \href{insert url here}{text}
+% -----------------------------------------------------------------------------
+                                % Indent first paragraph
+% Optional: \usepackage{indentfirst}
+% -----------------------------------------------------------------------------
+                                % Creates header
+\usepackage{lastpage}
+\usepackage{fancyhdr}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \lhead{\small \nouppercase{\leftmark}}       % adds chapter name to left header
+    \rhead{\small \rightmark}      % adds section name to right header
+    \cfoot{Page $\thepage$ out of $\pageref*{LastPage}$}    % adds page numbers
+
+    % create custom header for first page
+    \fancypagestyle{customfirst}{
+        \renewcommand{\headrulewidth}{0pt}
+        \cfoot{Page $\thepage$ out of $\pageref*{LastPage}$}
+    }
+% -----------------------------------------------------------------------------
+                                % Adjust line spacing
+\usepackage{setspace}
+    \singlespacing
+% -----------------------------------------------------------------------------
+                                % Includes specialized lists
+\usepackage{paralist}
+    % Format
+        % \begin{compactenum}
+        %   \item Item 1
+        %   \begin{compactitem}
+        %       \item Subitem
+        %   \end{compactitem}
+        % \end{compactenum}
+        
+\usepackage{enumitem}
+    % Format
+		% \setlist{nolistsep}
+        % \setitemize[1]{label = insert label here}
+        % \setenumerate[1]{label = insert label here}
+        %
+        % \begin{enumerate}
+		%	\item Item
+        %   \begin{itemize}
+        %       \item Subitem
+        %   \end{itemize}
+        % \end{enumerate}
+
+    \setlist{nolistsep}         % spacing between lists and other stuff set to 0
+% -----------------------------------------------------------------------------
+                                % Adjust tables
+\usepackage{array}
+    \setlength{\extrarowheight}{2pt}        % adds more height to table rows
+            % Optional: \usepackage{booktabs}
+    % Format
+        % \begin{table}[placement]  i.e)   h = here, t = top, b = bot
+        %   \centering
+        %   \begin{tabular}{|c}     i.e)   | = vertical line, c = column
+        %       \stuff
+        %   \end{tabular}
+        % \caption{Name of table}
+        % \label{Table label}    
+        % \end{table}
+% -----------------------------------------------------------------------------
+                                % Include pictures
+\usepackage{graphicx}
+    % Format
+        % \begin{figure}[h]
+        %   \centering
+        %   \includegraphics[scale=0.25]{Picture}
+        %   \caption{Name of picture}
+        %   \label{Picture label}
+        % \end{figure}
+% -----------------------------------------------------------------------------
+                                % Include colors (also to tables)
+\usepackage{xcolor}
+    % Format
+    %   \color{insert color here}
+    %   \definecolor{name}{RGB}{#, #, #}
+\usepackage{colortbl}
+    \definecolor{purple}{RGB}{210, 0, 235}
+    \definecolor{lblue}{RGB}{10, 180, 250}
+    \definecolor{green}{RGB}{0, 250, 155}
+    \definecolor{lgreen}{RGB}{80, 225, 210}
+    \definecolor{dgreen}{RGB}{85, 220, 110}
+    \definecolor{lyellow}{RGB}{255, 255, 200}
+% -----------------------------------------------------------------------------  
+                                % Adjust paper size
+\usepackage[a4paper, inner=2cm, outer=2cm, top=2cm, bottom=2cm]{geometry}
+    \setlength\headheight{15pt}         % set heigh of header to 15pt
+    \renewcommand{\headwidth}{17cm}     % set width of header to 15cm
+% -----------------------------------------------------------------------------
+								% Include textboxes & boxed minipages
+\usepackage{adjustbox}
+    % \begin{adjustbox}{minipage=14cm, right}
+    % \end{adjustbox}
+\usepackage{boxedminipage}
+% -----------------------------------------------------------------------------
+								% Include crossed out statements
+\usepackage{cancel}
+\newcommand\ccancel[2][black]{
+    \let\OldcancelColor\CancelColor
+    \renewcommand\CancelColor{\color{#1}}
+    \cancel{#2}
+    \renewcommand\CancelColor{\OldcancelColor}
+}
+    % \cancel{text} = strikethrough from bot to top
+    % \bcancel{text} = strikethrough from top to bot
+    % \xcancel{text} = strikethrough form X
+    % \cancelto{value}{text} = strikethrough with superscript value
+% -----------------------------------------------------------------------------
+								% Include cursive font
+\usepackage{mathrsfs}
+% -----------------------------------------------------------------------------
+								% Include code blocks
+\usepackage{listings, lstautogobble}
+\lstdefinestyle{python-yellow}{
+    language = Python,
+    backgroundcolor = \color{lyellow},
+    commentstyle = \color{dgreen},
+    keywordstyle = \color{red},
+    numberstyle = \color{black},
+    stringstyle = \color{purple},
+    frame = single,
+    showspaces = false,
+    showstringspaces = false,
+    autogobble = true,
+    deletekeywords = [2]{next}
+}
+\lstset{basicstyle = \footnotesize, style = python-yellow}
+% -----------------------------------------------------------------------------
+                                % Personal environments
+\newcounter{total}[subsection]
+\setcounter{total}{0}
+
+\newenvironment{definition}[2]
+    {   
+        \stepcounter{total}
+        { \color{blue} Definition \thesubsection.\arabic{total}: #1 }
+
+        \begin{adjustbox}{minipage=#2, right, vspace=0.1cm 0cm}
+    }
+    {
+        \end{adjustbox}
+    }
+
+\newenvironment{wtheorem}[2]
+    {   
+        \stepcounter{total}
+        { \color{red} Theorem \thesubsection.\arabic{total}: #1}
+
+        \begin{adjustbox}{minipage=#2, right, vspace=0.1cm 0cm}
+    }
+    {
+        \end{adjustbox}
+    }
+
+\newenvironment{ltheorem}[2]
+    {   
+        \stepcounter{total}
+        { \color{red} Theorem \thesubsection.\arabic{total}: #1}
+
+        \begin{enumerate}[label=(\alph*), leftmargin=#2, itemsep=0.1cm]
+    }
+    {
+        \end{enumerate}
+    }    
+
+\newenvironment{corollary}[2]
+    {   
+        \stepcounter{total}
+        { \color{orange} Corollary \thesubsection.\arabic{total}: #1 }
+
+        \begin{adjustbox}{minipage=#2, right, vspace=0.1cm 0cm}
+    }
+    {
+        \end{adjustbox}
+    }
+
+\newenvironment{example}[1][16cm]
+    {   
+        { \color{purple} Example }
+
+        \begin{adjustbox}{minipage=#1, right, vspace=0.1cm 0cm}
+    }
+    {
+        \end{adjustbox}
+    }
+
+\newenvironment{proof}[1][17cm]
+    {   
+        { \color{magenta} \underline{Proof} }
+
+        \begin{adjustbox}{vspace=0.1cm 0cm}
+        \begin{boxedminipage}{#1}
+    }
+    {
+        \end{boxedminipage}
+        \end{adjustbox}
+    }
+
+\newenvironment{tbox}[1][17cm]
+    {
+        \begin{adjustbox}{vspace=0.1cm 0cm}
+        \begin{boxedminipage}{#1}
+    }
+    {
+        \end{boxedminipage}
+        \end{adjustbox}
+    }
+
+\newenvironment{intuition}[1][17cm]
+    {
+        { \color{green} \textbf{Intuition} }
+
+        \begin{adjustbox}{vspace=0.1cm 0cm}
+        \begin{boxedminipage}{#1}
+    }
+    {
+        \end{boxedminipage}
+        \end{adjustbox}
+    }
+% -----------------------------------------------------------------------------
+                                % Personal commands
+% Number with circle around it
+\newcommand{\circnum}[1]{\raisebox{.5pt}{\textcircled{\raisebox{-1pt} {#1}}}}
+% Level 1 yeyword labeled light blue
+\newcommand{\keyword}[1]{{\color{lblue} #1}}
+% Level 2 keyword labled light green
+\newcommand{\subkeyword}[1]{{\color{lgreen} #1}}
+% Heading page
+\newcommand{\subheadpage}[3]{
+    \thispagestyle{empty}
+    \newpagecolor{lightgray}
+
+    \begin{center}
+        \huge
+        
+        \vspace*{4cm}
+
+        \textbf{#1}
+
+        \vspace*{1cm}
+
+        \includegraphics[scale=#3]{#2}
+    \end{center}
+
+    \afterpage{\restorepagecolor}
+}

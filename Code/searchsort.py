@@ -42,6 +42,16 @@ def selection_sort(list):
         temp.pop(index_min)
     return list_sorted
 
+def selection_sort2(list):
+    for i in range(0, len(list), 1):
+        min = list[i]
+        for j in range(i+1, len(list), 1):
+            if (list[j] < list[i]):
+                min = list[j]
+                list[j] = list[i]
+                list[i] = min
+    return list
+
 # Merge sort
 
 # Helper function to sort two list into one sorted list

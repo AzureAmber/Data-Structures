@@ -1,0 +1,100 @@
+\newpage
+
+\section[Day 2: Searches \& Sorting]{ Searches \& Sorting }
+
+\subsection{ Linear Search }
+
+    \begin{lstlisting}
+        def linear_search(list, value):
+            for i in range(0, len(list), 1):
+                if (list[i] == value):
+                    return i
+            return None
+    \end{lstlisting}
+
+
+
+
+
+\subsection{ Binary Search }
+
+    \begin{lstlisting}
+        def binary_search(list, value):
+            def limits(min, max):
+                mid = (min + max) // 2
+                if (min > max):
+                    return None
+                elif (list[mid] < value):
+                    return limits(mid+1, max)
+                elif (list[mid] > value):
+                    return limits(min, mid-1)
+                else:
+                    return mid
+            return limits(0, len(list)-1)
+    \end{lstlisting}
+
+
+
+
+
+\subsection{ Selection Sort }
+
+    \begin{lstlisting}
+        def selection_sort2(list):
+            temp = list.copy()
+            for i in range(0, len(temp), 1):
+                min = temp[i]
+                for j in range(i+1, len(temp), 1):
+                    if (temp[j] < temp[i]):
+                        min = temp[j]
+                        temp[j] = temp[i]
+                        temp[i] = min
+            return list
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Merge Sort }
+
+    \begin{lstlisting}
+        def sort(list1, list2):
+            temp = list1 + list2
+            i = 0
+            j = len(list1)
+            list_sorted = []
+            while (i != len(list1) and j != len(temp)):
+                if (temp[i] <= temp[j]):
+                    list_sorted.append(temp[i])
+                    i += 1
+                else:
+                    list_sorted.append(temp[j])
+                    j += 1
+            if (i != len(list1)):
+                list_sorted = list_sorted + temp[i:len(list1)]
+            else:
+                list_sorted = list_sorted + temp[j:len(temp)]
+            return list_sorted
+
+        def merge_sort(list):
+            if (len(list) <= 1):
+                return list
+            else:
+                mid = len(list) // 2
+                lista = list[0:mid]
+                listb = list[mid:len(list)]
+                return sort(merge_sort(lista), merge_sort(listb))
+    \end{lstlisting}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,174 @@
+\newpage
+
+\section[Day 5: Graphs]{ Graphs }
+
+\subsection{ Graph }
+
+    \begin{lstlisting}
+        class graph:
+            def __init__(self):
+                self.vertices = []
+                self.edges = []
+                self.length = 0
+
+            def add_vertice(self, vertice):
+                if (vertice not in self.vertices):
+                    self.length += 1
+                    self.vertices.append(vertice)
+                    for x in self.edges:
+                        x.append(False)
+                    self.edges.append([False] * self.length)
+                    self.edges[self.length - 1][self.length - 1] = True    
+                            
+            def set_connect(self, vertice1, vertice2, value):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    self.edges[pos1][pos2] = value
+                    self.edges[pos2][pos1] = value
+                    
+            def connect(self, vertice1, vertice2):
+                self.set_connect(vertice1, vertice2, True)
+                
+            def disconnect(self, vertice1, vertice2):
+                self.set_connect(vertice1, vertice2, False)
+                
+            def has_edge(self, vertice1, vertice2):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    return self.edges[pos1][pos2] 
+                else:
+                    return False
+                
+            def get_neighbors(self, vertice):
+                temp = []
+                if (vertice in self.vertices):
+                    pos = self.vertices.index(vertice)
+                    for i in range(0, self.length):
+                        if (i != pos and self.edges[pos][i]):
+                            temp.append(self.vertices[i])
+                return temp
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Directed Graph }
+
+    \begin{lstlisting}
+        class digraph:
+            def __init__(self):
+                self.vertices = []
+                self.edges = []
+                self.length = 0
+
+            def add_vertice(self, vertice):
+                if (vertice not in self.vertices):
+                    self.length += 1
+                    self.vertices.append(vertice)
+                    for x in self.edges:
+                        x.append(False)
+                    self.edges.append([False] * self.length)
+                    self.edges[self.length - 1][self.length - 1] = True    
+
+            def set_connect(self, vertice1, vertice2, value):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    self.edges[pos1][pos2] = value
+                    
+            def connect(self, vertice1, vertice2):
+                self.set_connect(vertice1, vertice2, True)
+                
+            def disconnect(self, vertice1, vertice2):
+                self.set_connect(vertice1, vertice2, False)
+                
+            def has_edge(self, vertice1, vertice2):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    return self.edges[pos1][pos2] 
+                else:
+                    return False
+                
+            def get_neighbors(self, vertice):
+                temp = []
+                if (vertice in self.vertices):
+                    pos = self.vertices.index(vertice)
+                    for i in range(0, self.length):
+                        if (i != pos and self.edges[pos][i]):
+                            temp.append(self.vertices[i])
+                return temp
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Weighted Directed Graph }
+
+    \begin{lstlisting}
+        class wdigraph:
+            def __init__(self):
+                self.vertices = []
+                self.edges = []
+                self.length = 0
+
+            def add_vertice(self, vertice):
+                if (vertice not in self.vertices):
+                    self.length += 1
+                    self.vertices.append(vertice)
+                    for x in self.edges:
+                        x.append(float("inf"))
+                    self.edges.append([float("inf")] * self.length)
+                    self.edges[self.length - 1][self.length - 1] = 0    
+
+            def set_connect(self, vertice1, vertice2, value):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    self.edges[pos1][pos2] = value
+                    
+            def connect(self, vertice1, vertice2, value):
+                self.set_connect(vertice1, vertice2, value)
+                
+            def disconnect(self, vertice1, vertice2):
+                self.set_connect(vertice1, vertice2, float("inf"))
+
+            def get_edge(self, vertice1, vertice2):
+                if (vertice1 in self.vertices and vertice2 in self.vertices):
+                    pos1 = self.vertices.index(vertice1)
+                    pos2 = self.vertices.index(vertice2)
+                    return self.edges[pos1][pos2]
+                else:
+                    return float("inf")
+                
+            def has_edge(self, vertice1, vertice2):
+                if (self.get_edge(vertice1, vertice2) == float("inf")):
+                    return False
+                else:
+                    return True
+                
+            def get_neighbors(self, vertice):
+                temp = []
+                if (vertice in self.vertices):
+                    pos = self.vertices.index(vertice)
+                    for i in range(0, self.length):
+                        if (i != pos and self.edges[pos][i] != float("inf")):
+                            temp.append(self.vertices[i])
+                return temp
+    \end{lstlisting}
+
+
+
+
+
+
+
+

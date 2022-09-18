@@ -1,0 +1,77 @@
+\newpage
+
+\section[Day 6: Graph Searches]{ Graph Searches }
+
+\subsection{ Depth-First Search }
+
+    \begin{lstlisting}
+        def dfs(graph, start):
+            visited = [None] * graph.length
+            to_visit_stack = stack()
+            visited_from_stack = stack()
+            
+            to_visit_stack.push(start)
+            visited_from_stack.push(start)
+            
+            while (not to_visit_stack.empty()):
+                from_vertex = to_visit_stack.pop()
+                vertex_index = graph.get_index(from_vertex)
+                if (visited[vertex_index] is None):
+                    visited[vertex_index] = visited_from_stack.pop()
+                    next_vertices = graph.get_neighbors(from_vertex)
+                    for v in next_vertices:
+                        to_visit_stack.push(v)
+                        visited_from_stack.push(from_vertex)
+                else:
+                    visited_from_stack.pop()
+            return visited
+    \end{lstlisting}
+
+
+
+
+
+\subsection{ Breath-First Search }
+
+    \begin{lstlisting}
+        def bfs(graph, start):
+            visited = [None] * graph.length
+            to_visit_queue = queue()
+            visited_from_queue = queue()
+            
+            to_visit_queue.enqueue(start)
+            visited_from_queue.enqueue(start)
+            
+            while (not to_visit_queue.empty()):
+                from_vertex = to_visit_queue.dequeue()
+                vertex_index = graph.get_index(from_vertex)
+                if (visited[vertex_index] is None):
+                    visited[vertex_index] = visited_from_queue.dequeue()
+                    next_vertices = graph.get_neighbors(from_vertex)
+                    for v in next_vertices:
+                        to_visit_queue.enqueue(v)
+                        visited_from_queue.enqueue(from_vertex)
+                else:
+                    visited_from_queue.dequeue()
+            return visited
+    \end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -194,15 +194,6 @@ class priority_queue:
     
     def empty(self):
         return self.length == 0
-    
-    def get_data(self):
-        temp = ""
-        curr_data = self.head
-        while (curr_data is not None):
-            temp = temp + str(curr_data.data) + ":" + str(curr_data.value) + " -> "
-            curr_data = curr_data.next
-        temp = temp + "None"
-        return temp
 
 
 

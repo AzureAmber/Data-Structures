@@ -1,0 +1,120 @@
+\newpage
+
+\section[Day 1: Linked List]{ Linked Lists }
+
+\subsection{ Singly Linked List }
+
+    \begin{lstlisting}
+        class node:
+            def __init__(self, data = None, next = None):
+                self.data = data
+                self.next = next
+
+        class linkedlist:
+            def __init__(self):
+                self.head = None
+                self.tail = self.head
+                self.length = 0
+                
+            def push_front(self, data):
+                if (self.head is None):
+                    self.head = node(data, None)
+                    self.tail = self.head
+                else:
+                    self.head = node(data, self.head)
+                self.length += 1
+
+            def find_nth(self, index):
+                if (index >= self.length):
+                    return None
+                else:
+                    cur_index = 0
+                    cur = self.head
+                    while (cur_index < index):
+                        cur = cur.next
+                        cur_index += 1
+                    return cur
+            
+            def get_nth(self, index):
+                if (index >= self.length):
+                    return None
+                else:
+                    return self.find_nth(index).data
+            
+            def set_nth(self, index, data):
+                if (index >= self.length):
+                    return None
+                else:
+                    self.find_nth(index).data = data
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+\subsection{ Doubly Linked List }
+
+    \begin{lstlisting}
+        class node:
+            def __init__(self, data = None, prev = None, next = None):
+                self.data = data
+                self.prev = prev
+                self.next = next
+
+        class linkedlist:
+            def __init__(self):
+                self.head = None
+                self.tail = self.head
+                self.length = 0
+                
+            def push_front(self, data):
+                if (self.head is None):
+                    self.head = node(data, None, None)
+                    self.tail = self.head
+                else:
+                    self.head.next = node(data, self.head, None)
+                    self.head = self.head.next
+                self.length += 1
+                
+            def push_back(self, data):
+                if (self.head is None):
+                    self.head = node(data, None, None)
+                    self.tail = self.head
+                else:
+                    self.tail.prev = node(data, None, self.tail)
+                    self.tail = self.tail.prev
+                self.__length += 1
+                
+            def pop_front(self):
+                if (self.__length == 0):
+                    return None
+                elif (self.__length == 1):
+                    value = self.head.data
+                    self.head = None
+                    self.tail = None
+                else:
+                    value = self.head.data
+                    self.head = self.head.prev
+                    self.head.next = None
+                self.length -= 1
+                return value
+                    
+            def pop_back(self):
+                if (self.length == 0):
+                    return None
+                elif (self.length == 1):
+                    value = self.tail.data
+                    self.head = None
+                    self.tail = None
+                else:
+                    value = self.tail.data
+                    self.tail = self.tail.next
+                    self.head.prev = None
+                self.length -= 1
+                return value
+    \end{lstlisting}
+
+
+
+

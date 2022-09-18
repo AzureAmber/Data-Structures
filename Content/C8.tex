@@ -1,0 +1,157 @@
+\newpage
+
+\section[Day 8: Minimum Spanning Trees]{ Minimum Spanning Trees }
+
+\subsection{ Union-Find: Quick-Find Version }
+
+    \begin{lstlisting}
+        class union_find_qf:
+            def __init__(self, length):
+                self.elements = list(range(0, length))
+                self.length = length
+
+            def get_parent(self, value):
+                return self.elements[value]
+            
+            def is_same_set(self, value1, value2):
+                return self.get_parent(value1) == self.get_parent(value2)
+            
+            def union(self, value1, value2):
+                convert_from = self.get_parent(value1)
+                convert_to = self.get_parent(value2)
+                if (convert_from != convert_to):
+                    for value in range(0, self.length):
+                        if (self.get_parent(value) == convert_from):
+                            self.elements[value] = convert_to
+
+            def get_set(self):
+                return self.elements
+
+        def kruskal(graph):
+            min_graph = wgraph()
+            graph_vertices = graph.get_vertices()
+            for vertex in graph_vertices:
+                min_graph.add_vertice(vertex)
+            components = union_find_qf(graph.get_length())
+            edges_to_check = bin_heap()
+            graph_edges = graph.get_edges()
+            for vertex_from_index in range(0, graph.get_length()):
+                for vertex_to_index in range(0, graph.get_length()):
+                    if (graph_edges[vertex_from_index][vertex_to_index] < float("inf")
+                        and vertex_from_index != vertex_to_index):
+                        edges_to_check.insert(
+                            [vertex_from_index, vertex_to_index],
+                            graph_edges[vertex_from_index][vertex_to_index])
+            
+            while (not edges_to_check.empty()):
+                cur_edge = edges_to_check.remove()
+                if (not components.is_same_set(cur_edge[0], cur_edge[1])):
+                    components.union(cur_edge[0], cur_edge[1])
+                    min_graph.connect(
+                        graph_vertices[cur_edge[0]],
+                        graph_vertices[cur_edge[1]],
+                        graph_edges[cur_edge[0]][cur_edge[1]])
+            
+            return min_graph
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Union-FInd: Weighted Quick-Union Version }
+
+    \begin{lstlisting}
+        class union_find_wqu:
+            def __init__(self, length: int):
+                self.elements = list(range(0, length))
+                self.weights = [1] * length
+                self.length = length
+     
+            def get_parent(self, value):
+                cur_parent = self.elements[value]
+                while (self.elements[cur_parent] != cur_parent):
+                    cur_parent = self.elements[cur_parent]
+                return cur_parent
+
+            def is_same_set(self, value1, value2):
+                return self.get_parent(value1) == self.get_parent(value2)
+            
+            def union(self, value1, value2):
+                root1 = self.get_parent(value1)
+                root2 = self.get_parent(value2)
+                if (root1 != root2):
+                    if (self.weights[root1] <= self.weights[root2]):
+                        self.elements[root1] = root2
+                        self.weights[root2] += self.weights[root1]
+                    else:
+                        self.elements[root2] = root1
+                        self.weights[root1] += self.weights[root2]
+
+            def get_set(self):
+                return self.elements
+            
+            def get_weights(self):
+                return self.weights
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Union-Find: Weighted Quick-Union + Path Compression }
+
+    \begin{lstlisting}
+        class union_find_wqupc:
+            def __init__(self, length: int):
+                self.elements = list(range(0, length))
+                self.weights = [1] * length
+                self.length = length
+
+            def get_parent(self, value):
+                prev_value = value
+                cur_value = self.elements[prev_value]
+                elements_passed_through = []
+                cur_weight_total = 0
+                while (self.elements[cur_value] != cur_value):
+                    elements_passed_through.append(prev_value)
+                    cur_weight_total += self.weights[prev_value]
+                    self.weights[cur_value] -= cur_weight_total
+                    prev_value = cur_value
+                    cur_value = self.elements[cur_value]
+                for element in elements_passed_through:
+                    self.elements[element] = cur_value
+                return cur_value
+
+            def is_same_set(self, value1, value2):
+                return self.get_parent(value1) == self.get_parent(value2)
+            
+            def union(self, value1, value2):
+                root1 = self.get_parent(value1)
+                root2 = self.get_parent(value2)
+                if (root1 != root2):
+                    if (self.weights[root1] <= self.weights[root2]):
+                        self.elements[root1] = root2
+                        self.weights[root2] += self.weights[root1]
+                    else:
+                        self.elements[root2] = root1
+                        self.weights[root1] += self.weights[root2]
+
+            def get_set(self):
+                return self.elements
+            
+            def get_weights(self):
+                return self.weights
+    \end{lstlisting}
+
+
+
+
+
+
+
+

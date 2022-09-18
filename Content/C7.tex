@@ -1,0 +1,267 @@
+\newpage
+
+\section[Day 7: Single Source Shortest Path]{ Single Source Shortest Path }
+
+\subsection{ Depth-First Search Method }
+
+    \begin{lstlisting}
+        def dfs_sssp(graph, start):
+            edges = graph.get_edges()
+            for vertice_pair in edges:
+                for weight in vertice_pair:
+                    if (weight < 0):
+                        return False
+                    
+            distance = [float("inf")] * graph.get_length()
+            visited = [None] * graph.get_length()
+            to_visit_stack = stack()
+
+            start_index = graph.get_index(start)
+            distance[start_index] = 0
+            visited[start_index] = start
+            
+            to_visit_stack.push(start)
+            
+            while (not to_visit_stack.empty()):
+                cur_vertex = to_visit_stack.pop()
+                cur_index = graph.get_index(cur_vertex)
+                
+                next_vertices = graph.get_neighbors(cur_vertex)
+                for v in next_vertices:
+                    cur_distance = distance[cur_index] + graph.get_edge(cur_vertex, v)
+                    next_index = graph.get_index(v)
+                    if (cur_distance < distance[next_index]):
+                        distance[next_index] = cur_distance
+                        visited[next_index] = cur_vertex
+                        to_visit_stack.push(v)
+            return visited
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Djikstra's Algorithm }
+
+    \begin{lstlisting}
+        class wnode:
+            def __init__(self, data = None, value = None, next = None):
+                self.data = data
+                self.value = value
+                self.next = next
+
+        # Priority Queue
+        class priority_queue:
+            def __init__(self):
+                self.head = None
+                self.tail = self.head
+                self.length = 0
+            
+            def enqueue(self, data, priority):
+                if (self.head is None):
+                    self.head = wnode(data, priority, self.head)
+                    self.tail = self.head
+                else:
+                    if (self.tail.value < priority):
+                        self.tail.next = wnode(data, priority, None)
+                        self.tail = self.tail.next
+                    elif (self.head.value >= priority):
+                        self.head = wnode(data, priority, self.head)
+                    else:
+                        curr_data = self.head
+                        while (curr_data.next.value < priority):
+                            curr_data = curr_data.next
+                        curr_data.next = wnode(data, priority, curr_data.next)
+                self.length += 1
+                
+            def dequeue(self):
+                if (self.length == 0):
+                    return None
+                else:
+                    value = self.head.data
+                    self.head = self.head.next
+                    self.length -= 1
+                    return value
+            
+            def empty(self):
+                return self.length == 0
+    \end{lstlisting}
+
+    \newpage
+
+    \begin{lstlisting}
+        def dijkstra(graph, start):
+            edges = graph.get_edges()
+            for vertice_pair in edges:
+                for weight in vertice_pair:
+                    if (weight < 0):
+                        return False
+                    
+            distance = [float("inf")] * graph.get_length()
+            visited = [None] * graph.get_length()
+            to_visit = priority_queue()
+            completed = [False] * graph.get_length()
+
+            start_index = graph.get_index(start)
+            distance[start_index] = 0
+            visited[start_index] = start
+            
+            to_visit.enqueue(start, 0)
+            
+            while (not to_visit.empty()):
+                cur_vertex = to_visit.dequeue()
+                cur_index = graph.get_index(cur_vertex)
+                
+                if (not completed[cur_index]):
+                    completed[cur_index] = True
+                    next_vertices = graph.get_neighbors(cur_vertex)
+                    for v in next_vertices:
+                        cur_dist = distance[cur_index] + graph.get_edge(cur_vertex, v)
+                        next_index = graph.get_index(v)
+                        if (cur_dist < distance[next_index]):
+                            distance[next_index] = cur_dist
+                            visited[next_index] = cur_vertex
+                            priority = graph.get_edge(cur_vertex, v)
+                            to_visit.enqueue(v, priority)
+            return visited
+    \end{lstlisting}
+
+    \newpage
+
+
+
+
+
+\subsection{ Binary Heap }
+
+    \begin{lstlisting}
+        class bin_heap:
+            def __init__(self):
+                self.size = 32
+                self.length = 0
+                self.keys = [None] * self.size
+                self.values = [float("inf")] * self.size
+
+            def insert(self, key, value: int):
+                if (self.length == 0):
+                    self.keys[0] = key
+                    self.values[0] = value            
+                else:
+                    cur_index = self.length
+                    parent_index = (cur_index - 1) // 2
+                    self.keys[cur_index] = key
+                    self.values[cur_index] = value
+                    while (parent_index >= 0 and value < self.values[parent_index]):
+                        self.values[cur_index] = self.values[parent_index]
+                        self.keys[cur_index] = self.keys[parent_index]
+                        self.values[parent_index] = value
+                        self.keys[parent_index] = key
+                        cur_index = parent_index
+                        parent_index = (cur_index - 1) // 2
+                self.length += 1
+                self.check_grow()
+
+            def remove(self):
+                if (self.length == 0):
+                    return None
+                else:
+                    key = self.keys[0]
+                    cur_value = self.values[self.length - 1]
+                    cur_key = self.keys[self.length - 1]
+                    self.values[self.length - 1] = float("inf")
+                    self.keys[self.length - 1] = float("inf")
+                    cur_index = 0
+                    self.values[cur_index] = cur_value
+                    self.keys[cur_index] = cur_key
+                    left = 2 * cur_index + 1
+                    right = 2 * cur_index + 2
+                    while (left < self.size):
+                        if (cur_value > self.values[left] and
+                            cur_value > self.values[right]):
+                            if (self.values[left] <= self.values[right]):
+                                self.values[cur_index] = self.values[left]
+                                self.keys[cur_index] = self.keys[left]
+                                self.values[left] = cur_value
+                                self.keys[left] = cur_key
+                                cur_index = left
+                            else:
+                                self.values[cur_index] = self.values[right]
+                                self.keys[cur_index] = self.keys[right]
+                                self.values[right] = cur_value
+                                self.keys[right] = cur_key
+                                cur_index = right
+                        elif (cur_value > self.values[left]):
+                            self.values[cur_index] = self.values[left]
+                            self.keys[cur_index] = self.keys[left]
+                            self.values[left] = cur_value
+                            self.keys[left] = cur_key
+                            cur_index = left
+                        elif (cur_value > self.values[right]):
+                            self.values[cur_index] = self.values[right]
+                            self.keys[cur_index] = self.keys[right]
+                            self.values[right] = cur_value
+                            self.keys[right] = cur_key
+                            cur_index = right
+                        else:
+                            break
+                        left = 2 * cur_index + 1
+                        right = 2 * cur_index + 2
+                    self.length -= 1
+                    return key
+            
+            def check_grow(self):
+                if (self.length == self.size):
+                    self.keys = self.keys + [None] * self.size
+                    self.values = self.values + [float("inf")] * self.size
+                    self.size *= 2
+                    
+            def get_keys(self):
+                return self.keys
+            
+            def get_values(self):
+                return self.values
+
+            def empty(self):
+                return (self.length == 0)
+    \end{lstlisting}
+
+    \begin{lstlisting}
+        def dijkstra_heap(graph, start):
+            edges = graph.get_edges()
+            for vertice_pair in edges:
+                for weight in vertice_pair:
+                    if (weight < 0):
+                        return False
+                    
+            distance = [float("inf")] * graph.get_length()
+            visited = [None] * graph.get_length()
+            to_visit = bin_heap()
+            completed = [False] * graph.get_length()
+
+            start_index = graph.get_index(start)
+            distance[start_index] = 0
+            visited[start_index] = start
+            
+            to_visit.insert(start, 0)
+    
+            while (not to_visit.empty()):
+                cur_vertex = to_visit.remove()
+                cur_index = graph.get_index(cur_vertex)
+                
+                if (not completed[cur_index]):
+                    completed[cur_index] = True
+                    next_vertices = graph.get_neighbors(cur_vertex)
+                    for v in next_vertices:
+                        cur_dist = distance[cur_index] + graph.get_edge(cur_vertex, v)
+                        next_index = graph.get_index(v)
+                        if (cur_dist < distance[next_index]):
+                            distance[next_index] = cur_dist
+                            visited[next_index] = cur_vertex
+                            priority = graph.get_edge(cur_vertex, v)
+                            to_visit.insert(v, priority)
+            return visited
+    \end{lstlisting}
+
+
